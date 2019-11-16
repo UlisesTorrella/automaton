@@ -8,29 +8,31 @@ final_states = {"q0","q2", "q1"}
 
 ## Precondition q in states and e in alphabet
 def delta0(q, e):
+    res = set()
     if q == "q0":
         if e == "a":
-            return "q2"
+            res = {"q2"}
         elif e == "b":
-            return "q1"
+            res = {"q1"}
     elif q == "q1":
         if e == "a":
-            return "q3"
+            res = {"q3"}
         elif e == "b":
-            return "q0"
+            res = {"q0"}
     elif q == "q2":
         if e == "a":
-            return "q2"
+            res = {"q2"}
         elif e == "b":
-            return "q1"
+            res = {"q1"}
     elif q == "q3":
         if e == "a":
-            return "q3"
+            res = {"q3"}
         elif e == "b":
-            return "q3"
+            res = {"q3"}
+    return res
 
 automata = Automaton(states, alphabet, delta0, initial_state, final_states)
 
-print(automata.execute("q0","a"))
+print(automata.execute({"q0"},"a"))
 
-print (automata.get_language(5))
+print (automata.get_anti_language(5))

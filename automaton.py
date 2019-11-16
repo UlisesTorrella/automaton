@@ -4,6 +4,7 @@ class Automaton:
     initial_state = ""
     final_states  = {}
 
+## delta should return a set of states
     def __init__(self, states, sigma, delta, initial_state, final_states):
         if final_states.issubset(states) and initial_state in states:
             self.states = states
@@ -15,15 +16,20 @@ class Automaton:
             print("something's wrong... I can feel it")
 
     def execute(self, q, e):
-        assert q in self.states and e in self.sigma
-        return self.delta(q, e)
+        assert q.issubset(self.states) and e in self.sigma
+        clausura = set()
+        for state in q:
+            d = self.delta(state, e)
+            clausura =clausura.union(d)
+        return clausura
 
     def run(self, word):
-        current_state = self.initial_state
+        current_state = {self.initial_state}
         for letter in word:
             assert letter in self.sigma, "Unknown letter for sigma"
+            #print current_state
             current_state = self.execute(current_state, letter)
-        return current_state in self.final_states
+        return not current_state.isdisjoint(self.final_states)
 
     def get_language(self, lenght):
         sigma_list = list(self.sigma)
